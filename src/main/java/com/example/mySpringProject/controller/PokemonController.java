@@ -1,4 +1,6 @@
 package com.example.mySpringProject.controller;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.mySpringProject.entities.Pokemon;
 import com.example.mySpringProject.repositories.PokemonRepository;
@@ -31,6 +34,7 @@ public class PokemonController {
 	public Iterable<Pokemon> getAllPokemon() {
 		return this.pokemonRepository.findAll();
 	}
+	
 	
 	@GetMapping("/pokemon/{id}")
 	public Optional<Pokemon> getPokemonById(@PathVariable Integer id) {
@@ -80,4 +84,24 @@ public class PokemonController {
 		return pokemonToDelete;
 		// curl -X DELETE http://localhost:8080/pokemon/4
 	}
+	
+	@GetMapping("/pokemon/search")
+	public List<Pokemon> searchPokemon( 
+			@RequestParam(name = "type", required = false) String type,
+			@RequestParam(name = "gender", required = false) String gender,
+			@RequestParam(name = "name", required = false) String name) {
+		if (type != null && gender != null) {
+			return this.pokemonRepository.findByTypeAndGender(type, gender);
+		} else if (type != null) {
+			return this.pokemonRepository.findByType(type);
+		} else if  (gender != null) {
+			return this.pokemonRepository.findByGender(gender);
+		} else if (name != null) {
+			return this.pokemonRepository.findByName(name);
+		} else {
+			return new ArrayList<>();
+		}
+		// curl 'http://localhost:8080/pokemon/search?type=Fire&gender=Male'
+	}
+
 }

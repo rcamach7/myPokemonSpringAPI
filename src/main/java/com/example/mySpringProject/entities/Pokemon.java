@@ -19,6 +19,9 @@ public class Pokemon {
 	@Column(name="TYPE")
 	private String type;
 	
+	@Column(name="GENDER")
+	private String gender;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -41,5 +44,13 @@ public class Pokemon {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 }
